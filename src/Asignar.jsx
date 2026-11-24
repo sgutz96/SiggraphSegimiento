@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { ESTADOS, claseEstado, etiquetaEstado } from './constantes'
 import { actualizarTarea, crearTarea } from './services'
 
-const vacio = { area: '', estado: 'pendiente', responsable: '', tags: '' }
+const vacio = { nombre: '', area: '', estado: 'pendiente', responsable: '', tags: '' }
 
 export default function Asignar({ registros, onCambio }) {
   const [form, setForm] = useState(vacio)
@@ -20,6 +20,7 @@ export default function Asignar({ registros, onCambio }) {
     setMensaje(null)
     try {
       const nueva = await crearTarea({
+        nombre: form.nombre.trim(),
         area: form.area.trim(),
         estado: form.estado,
         responsable: form.responsable.trim(),
@@ -49,6 +50,9 @@ export default function Asignar({ registros, onCambio }) {
       <form className="form" onSubmit={enviar}>
         <h2>Nueva tarea</h2>
         <div className="form-grid">
+          <label>Nombre
+            <input value={form.nombre} onChange={campo('nombre')} required />
+          </label>
           <label>Área
             <input list="lista-areas" value={form.area} onChange={campo('area')} required />
             <datalist id="lista-areas">{areas.map(a => <option key={a} value={a} />)}</datalist>
@@ -74,11 +78,12 @@ export default function Asignar({ registros, onCambio }) {
       <h2 className="section-title">Reasignar tareas existentes</h2>
       <section className="table-wrap">
         <table>
-          <thead><tr><th>ID</th><th>Área</th><th>Responsable</th><th>Estado</th></tr></thead>
+          <thead><tr><th>ID</th><th>Nombre</th><th>Área</th><th>Responsable</th><th>Estado</th></tr></thead>
           <tbody>
             {registros.map(r => (
               <tr key={r.id}>
                 <td className="id">#{r.id}</td>
+                <td className="nombre">{r.nombre || '—'}</td>
                 <td>{r.area || '—'}</td>
                 <td>
                   <input
@@ -102,7 +107,7 @@ export default function Asignar({ registros, onCambio }) {
                 </td>
               </tr>
             ))}
-            {registros.length === 0 && <tr><td colSpan="4" className="empty">No hay tareas.</td></tr>}
+            {registros.length === 0 && <tr><td colSpan="5" className="empty">No hay tareas.</td></tr>}
           </tbody>
         </table>
       </section>

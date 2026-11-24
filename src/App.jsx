@@ -3,6 +3,7 @@ import { obtenerRegistros } from './services'
 import TablaGeneral from './TablaGeneral'
 import Kanban from './Kanban'
 import Asignar from './Asignar'
+import Ornamento from './Ornamento'
 
 const PANTALLAS = [
   { id: 'tabla', nombre: 'Tabla general' },
@@ -39,12 +40,18 @@ export default function App() {
   return (
     <main className="page">
       <header className="top">
-        <div>
-          <p className="eyebrow">SUPABASE · GESTIÓN DE TAREAS</p>
-          <h1>Tareas del proyecto</h1>
-          <p className="sub">Datos consultados directamente desde tu tabla.</p>
+        <Ornamento />
+        <div className="brand">
+          <img className="emblema" src="/emblema.png" alt="Logo de SIGGRAPH San Buena" width="96" height="96" />
+          <div className="titulo">
+            <div>
+              <h1>Seguimiento de tareas</h1>
+              <p className="sub">SIGGRAPH San Buena</p>
+              <p className="sub suave">Tareas del capítulo por área, responsable y estado.</p>
+            </div>
+          </div>
         </div>
-        <button className="refresh" onClick={cargarDatos}>↻ Actualizar</button>
+        <button className="refresh" onClick={cargarDatos}>Actualizar</button>
       </header>
 
       <nav className="tabs">
@@ -71,11 +78,11 @@ export default function App() {
       {!cargando && !error && (
         <>
           {pantalla === 'tabla' && <TablaGeneral registros={registros} />}
-          {pantalla === 'kanban' && <Kanban registros={registros} />}
+          {pantalla === 'kanban' && <Kanban registros={registros} onCambio={aplicarCambio} />}
           {pantalla === 'asignar' && <Asignar registros={registros} onCambio={aplicarCambio} />}
         </>
       )}
-      <footer>Conectado mediante Supabase JavaScript Client</footer>
+      <footer>SIGGRAPH San Buena</footer>
     </main>
   )
 }

@@ -11,7 +11,7 @@ export default function TablaGeneral({ registros }) {
   )
 
   const filtrados = useMemo(() => registros.filter(r => {
-    const texto = `${r.id} ${r.area ?? ''} ${r.responsable ?? ''} ${(r.tags ?? []).join(' ')}`.toLowerCase()
+    const texto = `${r.id} ${r.nombre ?? ''} ${r.area ?? ''} ${r.responsable ?? ''} ${(r.tags ?? []).join(' ')}`.toLowerCase()
     const coincideTexto = texto.includes(busqueda.toLowerCase())
     const coincideEstado = filtroEstado === 'todos' || r.estado === filtroEstado
     return coincideTexto && coincideEstado
@@ -23,7 +23,7 @@ export default function TablaGeneral({ registros }) {
         <input
           value={busqueda}
           onChange={e => setBusqueda(e.target.value)}
-          placeholder="Buscar por área, responsable, tag o ID..."
+          placeholder="Buscar por nombre, área, responsable, tag o ID..."
           aria-label="Buscar registros"
         />
         <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)}>
@@ -36,12 +36,13 @@ export default function TablaGeneral({ registros }) {
       <section className="table-wrap">
         <table>
           <thead>
-            <tr><th>ID</th><th>Área</th><th>Estado</th><th>Responsable</th><th>Tags</th><th>Creado</th></tr>
+            <tr><th>ID</th><th>Nombre</th><th>Área</th><th>Estado</th><th>Responsable</th><th>Tags</th><th>Creado</th></tr>
           </thead>
           <tbody>
             {filtrados.map(r => (
               <tr key={r.id}>
                 <td className="id">#{r.id}</td>
+                <td className="nombre">{r.nombre || '—'}</td>
                 <td>{r.area || '—'}</td>
                 <td><span className={`status ${claseEstado(r.estado)}`}>{etiquetaEstado(r.estado)}</span></td>
                 <td>{r.responsable || '—'}</td>
@@ -50,7 +51,7 @@ export default function TablaGeneral({ registros }) {
               </tr>
             ))}
             {filtrados.length === 0 && (
-              <tr><td colSpan="6" className="empty">No hay registros que coincidan con la búsqueda.</td></tr>
+              <tr><td colSpan="7" className="empty">No hay registros que coincidan con la búsqueda.</td></tr>
             )}
           </tbody>
         </table>

@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
 import { TABLA as tableName } from './config'
-const columnas = 'id, area, estado, responsable, tags, created_at'
+const columnas = 'id, nombre, area, estado, responsable, tags, created_at'
 
 function validarTabla() {
   if (!tableName || tableName === 'CAMBIA_POR_EL_NOMBRE_REAL_DE_TU_TABLA') {
@@ -18,11 +18,11 @@ export async function obtenerRegistros() {
   return data ?? []
 }
 
-export async function crearTarea({ area, estado, responsable, tags }) {
+export async function crearTarea({ nombre, area, estado, responsable, tags }) {
   validarTabla()
   const { data, error } = await supabase
     .from(tableName)
-    .insert({ area, estado, responsable, tags })
+    .insert({ nombre, area, estado, responsable, tags })
     .select(columnas)
     .single()
   if (error) throw error
